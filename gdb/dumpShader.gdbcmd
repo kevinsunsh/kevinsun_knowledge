@@ -1,0 +1,58 @@
+define appendToGivenFile
+  printf "using gdbtmp.log to dump memory to file %s.log\n", $arg0
+  set logging file gdbtmp.log
+  set logging overwrite on
+  set logging redirect on
+  set logging on
+  printf "append binary memory %s.log 0x%x 0x%x", $arg0, $arg1, $arg2
+  set logging off
+  set logging redirect off
+  set logging overwrite off
+  source gdbtmp.logp
+end
+
+document appendToGivenFile
+  append memory to given file!!!\n
+end
+
+define dumpToGivenFile
+  printf "using gdbtmp.log to dump memory to file %s.log\n", $arg0
+  set logging file gdbtmp.log
+  set logging overwrite on
+  set logging redirect on
+  set logging on
+  printf "dump binary memory %s.log 0x%x 0x%x", $arg0, $arg1, $arg2
+  set logging off
+  set logging redirect off
+  set logging overwrite off
+  source gdbtmp.log
+end
+
+document dumpToGivenFile
+  dump memory to given file!!!\n
+end
+
+define dumpShader
+ p $shaderCount = $arg0.FullSource.mCount
+ p $startMemory = {char*}&$arg0.FullSource.mBuffer
+ p $filename = $arg0.ShaderName.mpString
+ p $endMemory = $startMemory + $shaderCount
+ dumpToGivenFile $filename $startMemory $endMemory
+end
+
+document dumpShader
+  dump OGS shader to given file!!!\n
+end
+
+define appendShader
+ p $shaderCount = $arg0.FullSource.mCount
+ p $startMemory = {char*}&$arg0.FullSource.mBuffer
+ p $filename = $arg0.ShaderName.mpString
+ p $endMemory = $startMemory + $shaderCount
+ appendToGivenFile $filename $startMemory $endMemory
+end
+
+document dumpShader
+  append OGS shader to given file!!!\n
+end
+
